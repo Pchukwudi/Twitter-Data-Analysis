@@ -1,3 +1,5 @@
+import pandas as pd
+
 class Clean_Tweets:
     """
     The PEP8 Standard AMAZING!!!
@@ -12,7 +14,7 @@ class Clean_Tweets:
         the data collection stage.  
         """
         unwanted_rows = df[df['retweet_count'] == 'retweet_count' ].index
-        df.drop(unwanted_rows , inplace=True)
+        df.drop(unwanted_rows , inplace = True)
         df = df[df['polarity'] != 'polarity']
         
         return df
@@ -20,19 +22,15 @@ class Clean_Tweets:
         """
         drop duplicate rows
         """
-        
-        ---
+        df=df.drop_duplicates()  
         
         return df
     def convert_to_datetime(self, df:pd.DataFrame)->pd.DataFrame:
         """
         convert column to datetime
         """
-        ----
-        
-        ----
-        
-        df = df[df['created_at'] >= '2020-12-31' ]
+        df['created_at']=pd.to_datetime( df['created_at'])
+        # df = df[df['created_at'] >= '2020-12-31' ]
         
         return df
     
@@ -41,11 +39,13 @@ class Clean_Tweets:
         convert columns like polarity, subjectivity, retweet_count
         favorite_count etc to numbers
         """
-        df['polarity'] = pd.----
-        
-        ----
-        ----
-        
+        df['polarity'] = pd.to_numeric(df['polarity'], errors = 'raise', downcast = None)
+        df['subjectivity']= pd.to_numeric(df['subjectivity'], errors = 'raise', downcast = None)
+        df['favorite_count']= pd.to_numeric(df['fav_count'], errors = 'raise', downcast = None)
+        df['retweet_count']= pd.to_numeric(df['retweet_count'], errors = 'raise', downcast = None)
+        df['followers_count']= pd.to_numeric(df['followers_count'], errors = 'raise', downcast = None)
+        df['friends_count']= pd.to_numeric(df['friends_count'], errors = 'raise', downcast = None)
+
         return df
     
     def remove_non_english_tweets(self, df:pd.DataFrame)->pd.DataFrame:
@@ -53,6 +53,6 @@ class Clean_Tweets:
         remove non english tweets from lang
         """
         
-        df = ----
+        df = df[df['lang']== 'en'] 
         
         return df
