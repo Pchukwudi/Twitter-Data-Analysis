@@ -42,7 +42,7 @@ class Clean_Tweets:
         """
         df['polarity'] = pd.to_numeric(df['polarity'], errors = 'raise', downcast = None)
         df['subjectivity']= pd.to_numeric(df['subjectivity'], errors = 'raise', downcast = None)
-        df['favorite_count']= pd.to_numeric(df['fav_count'], errors = 'raise', downcast = None)
+        df['favorite_count']= pd.to_numeric(df['favorite_count'], errors = 'raise', downcast = None)
         df['retweet_count']= pd.to_numeric(df['retweet_count'], errors = 'raise', downcast = None)
         df['followers_count']= pd.to_numeric(df['followers_count'], errors = 'raise', downcast = None)
         df['friends_count']= pd.to_numeric(df['friends_count'], errors = 'raise', downcast = None)
@@ -53,6 +53,20 @@ class Clean_Tweets:
         """
         remove non english tweets from language column
         """
-        df = df[df['lang']== 'en'] 
+        df = df[df['lang'] == 'en'] 
         
         return df
+
+    
+if __name__ == "__main__":
+    tweet_df = pd.read_csv("./processed_tweet_data.csv")
+    cleaned_tweet = Clean_Tweets(tweet_df)
+
+    df = cleaned_tweet.drop_unwanted_column(cleaned_tweet.df)
+    df = cleaned_tweet.drop_duplicate(df)
+    df = cleaned_tweet.convert_to_numbers(df)
+    df = cleaned_tweet.convert_to_datetime(df)
+    df = cleaned_tweet.remove_non_english_tweets(df)
+
+    df.to_csv('cleaned_tweet_data.csv', index = False)
+  
